@@ -4,9 +4,11 @@ import {Transition , animated , config } from "react-spring"
 
 class Collapsible extends Component {
    state = {
-      toggle: false
+      toggle: false,
+      height: null
    }
-   onToggle = () => {
+   onToggle = (e) => {
+      e.preventDefault()
       this.setState({
          toggle: !this.state.toggle
       })
@@ -21,17 +23,19 @@ class Collapsible extends Component {
             </Title>
             <Transition
                native
-               config={ config.gentle }
-               from={{opacity : 0}}
-               enter={{opacity : 1}}
-               leave={{opacity : 0}}
+               config={config.gentle}
+               from={{opacity : 0.1 }}
+               enter={{opacity : 1 }}
+               leave={{opacity : 0 }}
             >
                {
                   toggle &&  (styles => (
                      <CardContent className="card-body" style={{
-                        opacity: styles.opacity
+                        opacity: styles.opacity.interpolate(opacity => opacity)
                       }}>
-                        <p className="card-text text-justify">{ children }</p>
+                        <p className="card-text text-justify" ref="myDiv">
+                           { children }
+                        </p>
                      </CardContent>
                   ))
                }
@@ -48,4 +52,6 @@ const Card = styled.div``
 
 const Title = styled.div`cursor: pointer`
 
-const CardContent = styled(animated.div)``
+const CardContent = styled(animated.div)`
+   transition: all 0.3s ease;
+`
